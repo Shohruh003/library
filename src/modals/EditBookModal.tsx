@@ -15,7 +15,7 @@ const EditBookModal = () => {
   const [values, setValues] = useState<IFormBook>({
     id: "",
     title: "",
-    cover: null,
+    image: null,
     author: "",
     published: 0,
     pages: 0,
@@ -23,25 +23,24 @@ const EditBookModal = () => {
 
   useEffect(() => {
     if (editModalState && book) {
-      if (book) {
-        setValues((prevValues) => ({
-          ...prevValues,
-          title: book.title || "",
-          author: book.author || "",
-          published: book.published || 0,
-          pages: book.pages || 0,
-        }));
+      setValues((prevValues) => ({
+        ...prevValues,
+        title: book.title || "",
+        author: book.author || "",
+        published: book.published || 0,
+        pages: book.pages || 0,
+      }));
 
-        if (book.cover instanceof File) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setValues((prevValues) => ({
-              ...prevValues,
-              cover: reader.result,
-            }));
-          };
-          reader.readAsDataURL(book.cover);
-        }
+      if (book.image instanceof File) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const imageDataURL = reader.result as string;
+          setValues((prevValues) => ({
+            ...prevValues,
+            image: imageDataURL,
+          }));
+        };
+        reader.readAsDataURL(book.image);
       }
     }
   }, [editModalState, book]);
@@ -61,7 +60,7 @@ const EditBookModal = () => {
     if (file) {
       setValues((prevValues) => ({
         ...prevValues,
-        cover: file,
+        image: file,
       }));
     }
   };
@@ -99,9 +98,13 @@ const EditBookModal = () => {
 
           <img
             src={
-              values.cover instanceof File
-                ? URL.createObjectURL(values.cover)
-                : values.cover || (book && book.cover)
+              values.image && !(values.image instanceof File)
+                ? URL.createObjectURL(
+                    new Blob([values.image], {
+                      type: "application/octet-stream",
+                    })
+                  )
+                : undefined
             }
             alt="Selected"
             width={40}
@@ -113,6 +116,7 @@ const EditBookModal = () => {
               objectFit: "cover",
             }}
           />
+
           <Box sx={{ marginTop: "20px" }}>
             <TextField
               id="outlined-size-small"

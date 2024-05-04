@@ -11,7 +11,7 @@ const AddBookModal = () => {
   const [values, setValues] = useState<IFormBook>({
     id: "",
     title: "",
-    cover: null,
+    image: null,
     author: "",
     published: 0,
     pages: 0,
@@ -31,7 +31,7 @@ const AddBookModal = () => {
     const file = files ? files[0] : null;
     setValues({
       ...values,
-      cover: file,
+      image: file,
     });
   };
 
@@ -64,12 +64,12 @@ const AddBookModal = () => {
           Добавить книга
         </Typography>
         <ModalClose onClick={handleClose} variant="plain" sx={{ m: 1 }} />
-        {values.cover && (
+        {values.image && (
           <img
             src={
-              values.cover instanceof File
-                ? URL.createObjectURL(values.cover)
-                : values.cover
+              values.image instanceof File
+                ? URL.createObjectURL(values.image)
+                : values.image
             }
             alt="Selected"
             width={100}
@@ -97,7 +97,7 @@ const AddBookModal = () => {
             label="Автор"
             variant="outlined"
             onChange={handleChange}
-            value={values.title}
+            value={values.author}
           />
 
           <TextField

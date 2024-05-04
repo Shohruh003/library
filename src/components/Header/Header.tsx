@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { IFormBook } from "../../types/interfaces";
 import { toggleModal, toggleBooks } from "../../store/common";
 import AddBookModal from "../../modals/AddBookModal";
+import styles from "./styles";
+import { CSSProperties } from "styled-components";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -35,15 +37,7 @@ const Header: React.FC = () => {
     <>
       {open && <AddBookModal />}
       <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "10px 10px",
-          borderBottom: "3px solid black",
-          boxShadow: "0px 1px 10px 1px",
-          marginBottom: "20px",
-        }}
+        sx={styles.header}
       >
         <TextField
           onChange={(e) => handleSearchChange(e.target.value)}
@@ -53,7 +47,7 @@ const Header: React.FC = () => {
           variant="outlined"
         />
         <Button variant="contained" color="success" onClick={handleOpen}>
-          <span style={{ marginRight: "5px" }}>Добавить</span>
+          <span style={styles.addButton as CSSProperties}>Добавить</span>
           <AddCircleIcon />
         </Button>
       </Box>
