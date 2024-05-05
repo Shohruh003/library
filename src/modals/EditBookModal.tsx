@@ -4,6 +4,9 @@ import ModalClose from "@mui/joy/ModalClose";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { IFormBook } from "../types/interfaces";
 import { toggleEditModal } from "../store/common";
+import Locale from "./locale";
+import styles from "./styles";
+import { CSSProperties } from "styled-components";
 
 const EditBookModal = () => {
   const dispatch = useAppDispatch();
@@ -15,8 +18,8 @@ const EditBookModal = () => {
   const [values, setValues] = useState<IFormBook>({
     id: "",
     title: "",
-    image: null,
     author: "",
+    image: null,
     published: 0,
     pages: 0,
   });
@@ -58,10 +61,14 @@ const EditBookModal = () => {
   }: ChangeEvent<HTMLInputElement>) => {
     const file = files ? files[0] : null;
     if (file) {
-      setValues((prevValues) => ({
-        ...prevValues,
-        image: file,
-      }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setValues((prevValues) => ({
+          ...prevValues,
+          image: file,
+        }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -78,102 +85,82 @@ const EditBookModal = () => {
         aria-describedby="modal-modal-description"
       >
         <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            textAlign: "center",
-            bgcolor: "background.paper",
-            border: "1px solid #000",
-            boxShadow: 24,
-            p: 4,
-          }}
+          sx={styles.modal}
         >
           <Typography variant="h6" component="h2">
-            Карточка сотрудника
+            {Locale.editModalHeading}
           </Typography>
           <ModalClose onClick={handleClose} variant="plain" sx={{ m: 1 }} />
 
           <img
             src={
-              values.image && !(values.image instanceof File)
-                ? URL.createObjectURL(
-                    new Blob([values.image], {
-                      type: "application/octet-stream",
-                    })
-                  )
-                : undefined
+              values?.image instanceof File
+                ? URL.createObjectURL(values.image)
+                : values?.image || (book?.image as string) || ""
             }
             alt="Selected"
-            width={40}
-            height={40}
-            style={{
-              width: "100px",
-              height: "100px",
-              marginTop: "10px",
-              objectFit: "cover",
-            }}
+            width={100}
+            height={100}
+            style={styles.modalImage as CSSProperties}
           />
 
-          <Box sx={{ marginTop: "20px" }}>
+          <Box sx={styles.formGroup}>
             <TextField
               id="outlined-size-small"
-              sx={{ width: "100%", marginBottom: "20px" }}
+              sx={styles.textField}
               size="small"
               name="title"
-              label="Название книги"
+              label={Locale.bookAuthor}
               variant="outlined"
               onChange={handleChange}
               value={values.title}
             />
 
             <TextField
-              sx={{ width: "100%", marginBottom: "20px" }}
+              sx={styles.textField}
               id="author"
               size="small"
               name="author"
-              label="Автор"
+              label={Locale.bookAuthor}
               variant="outlined"
               onChange={handleChange}
               value={values.author}
             />
 
             <TextField
-              sx={{ width: "100%", marginBottom: "20px" }}
+              sx={styles.textField}
               id="published"
               size="small"
               name="published"
               type="number"
-              label="Опубликовано"
+              label={Locale.bookYear}
               variant="outlined"
               onChange={handleChange}
               value={values.published}
             />
 
             <TextField
-              sx={{ width: "100%", marginBottom: "20px" }}
+              sx={styles.textField}
               id="pages"
               size="small"
               name="pages"
               type="number"
-              label="Страницы"
+              label={Locale.bookPage}
               variant="outlined"
               onChange={handleChange}
               value={values.pages}
             />
             <Button
-              sx={{ width: "100%", margin: "10px 0" }}
+              sx={styles.modalButton}
               variant="contained"
               component="label"
             >
-              ИЗМЕНИТЬ ИЗОБРАЖЕНИЕ
+              {Locale.editImage}
               <input type="file" hidden onChange={handleImageChange} />
             </Button>
 
-            <Button sx={{ width: "100%" }} variant="contained" color="success">
-              СОХРАНИТЬ
+            <Button sx={styles.addButton} variant="contained" color="success">
+              {Locale.add}
             </Button>
           </Box>
         </Box>

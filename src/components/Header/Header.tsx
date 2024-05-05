@@ -9,6 +9,7 @@ import { toggleModal, toggleBooks } from "../../store/common";
 import AddBookModal from "../../modals/AddBookModal";
 import styles from "./styles";
 import { CSSProperties } from "styled-components";
+import Locale from "./locale";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -42,12 +43,12 @@ const Header: React.FC = () => {
         <TextField
           onChange={(e) => handleSearchChange(e.target.value)}
           id="outlined-basic"
-          label="Глобальный поиск"
+          label={Locale.searchLabel}
           size="small"
           variant="outlined"
         />
         <Button variant="contained" color="success" onClick={handleOpen}>
-          <span style={styles.addButton as CSSProperties}>Добавить</span>
+          <span style={styles.addButton as CSSProperties}>{Locale.addButton}</span>
           <AddCircleIcon />
         </Button>
       </Box>

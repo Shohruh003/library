@@ -4,6 +4,9 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { IFormBook } from "../types/interfaces";
 import { toggleModal } from "../store/common";
 import { ModalClose } from "@mui/joy";
+import Locale from "./locale";
+import { CSSProperties } from "styled-components";
+import styles from "./styles";
 
 const AddBookModal = () => {
   const modalState = useAppSelector((state) => state.common.modalState);
@@ -47,21 +50,10 @@ const AddBookModal = () => {
       aria-describedby="modal-modal-description"
     >
       <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: 400,
-          textAlign: "center",
-          bgcolor: "background.paper",
-          border: "1px solid #000",
-          boxShadow: 24,
-          p: 4,
-        }}
+        sx={styles.modal}
       >
         <Typography variant="h6" component="h2">
-          Добавить книга
+          {Locale.addModalHeading}
         </Typography>
         <ModalClose onClick={handleClose} variant="plain" sx={{ m: 1 }} />
         {values.image && (
@@ -74,51 +66,51 @@ const AddBookModal = () => {
             alt="Selected"
             width={100}
             height={100}
-            style={{ width: "100px", marginTop: "10px", objectFit: "cover" }}
+            style={styles.modalImage as CSSProperties}
           />
         )}
-        <Box sx={{ marginTop: "20px" }}>
+        <Box sx={styles.formGroup}>
           <TextField
-            sx={{ width: "100%", marginBottom: "20px" }}
+            sx={styles.textField}
             id="title"
             size="small"
             name="title"
-            label="Название книги"
+            label={Locale.bookTitle}
             variant="outlined"
             onChange={handleChange}
             value={values.title}
           />
 
           <TextField
-            sx={{ width: "100%", marginBottom: "20px" }}
+            sx={styles.textField}
             id="author"
             size="small"
             name="author"
-            label="Автор"
+            label={Locale.bookAuthor}
             variant="outlined"
             onChange={handleChange}
             value={values.author}
           />
 
           <TextField
-            sx={{ width: "100%", marginBottom: "20px" }}
+            sx={styles.textField}
             id="published"
             size="small"
             name="published"
             type="number"
-            label="Опубликовано"
+            label={Locale.bookYear}
             variant="outlined"
             onChange={handleChange}
             value={values.published}
           />
 
           <TextField
-            sx={{ width: "100%", marginBottom: "20px" }}
+            sx={styles.textField}
             id="pages"
             size="small"
             name="pages"
             type="number"
-            label="Страницы"
+            label={Locale.bookPage}
             variant="outlined"
             onChange={handleChange}
             value={values.pages}
@@ -126,15 +118,15 @@ const AddBookModal = () => {
         </Box>
 
         <Button
-          sx={{ width: "100%", margin: "10px 0" }}
+          sx={styles.modalButton}
           variant="contained"
           component="label"
         >
-          ВЫБРАТЬ ФОТО
+          {Locale.addImage}
           <input type="file" hidden onChange={handleImageChange} />
         </Button>
-        <Button sx={{ width: "100%" }} variant="contained" color="success">
-          СОХРАНИТЬ
+        <Button sx={styles.addButton} variant="contained" color="success">
+          {Locale.add}
         </Button>
       </Box>
     </Modal>

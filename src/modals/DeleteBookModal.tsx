@@ -2,40 +2,26 @@ import React from "react";
 import { Box, Typography, Modal, Button, Stack } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { toggleDeleteModal } from "../store/common";
+import { useDeleteBookMutation } from "../store/slice/app.slice";
+import Locale from "./locale";
+import styles from "./styles";
 const DeleteBookModal = () => {
   const dispatch = useAppDispatch();
   const deleteModalState = useAppSelector(
     (state) => state.common.deleteModalState
   );
+  const [deleteBook] = useDeleteBookMutation()
   const bookId = useAppSelector((state) => state.common.bookId);
   console.log(bookId);
+
+  const handleDeleteBook = () => {
+    deleteBook(bookId)
+  }
 
   const handleClose = () => {
     dispatch(toggleDeleteModal(false));
   };
 
-//   const handleDeleteUser = async () => {
-//     try {
-//       const response = await api.delete(`users/${bookId}/`);
-//       dispatch(toggleDeleteModal(false));
-//       window.location.reload();
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    textAlign: "center",
-    bgcolor: "background.paper",
-    border: "1px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
 
   return (
     <div>
@@ -45,24 +31,24 @@ const DeleteBookModal = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={styles.deleteModal}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Вы хотите удалить ?
+            {Locale.caution}
           </Typography>
           <Stack
-            sx={{ marginTop: "20px", marginLeft: "30%" }}
+            sx={styles.buttonGroup}
             direction="row"
             spacing={2}
           >
             <Button
-            //   onClick={handleDeleteUser}
+                onClick={handleDeleteBook}
               variant="contained"
               color="success"
             >
-              Да
+              {Locale.yes}
             </Button>
             <Button onClick={handleClose} variant="outlined" color="error">
-              Нет
+              {Locale.no}
             </Button>
           </Stack>
         </Box>

@@ -9,8 +9,8 @@ export interface IFormUsers {
 export interface IFormBook {
   id: string;
   title: string;
-  image: undefined | File | string | null;
   author: string;
+  image: File | string | null;
   published: number;
   pages: number;
 }
